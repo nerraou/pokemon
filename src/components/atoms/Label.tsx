@@ -9,7 +9,10 @@ interface LabelProps {
 
 function Label(props: LabelProps) {
   return (
-    <label onClick={props.onClick} className="bg-orange rounded-md p-2">
+    <label
+      onClick={props.onClick}
+      className="bg-vanila rounded-md p-2 font-black"
+    >
       {props.text}
     </label>
   );

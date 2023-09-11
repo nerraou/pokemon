@@ -10,7 +10,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        orange: "#FFCD83",
+        vanila: "#F3e5ab",
+        dove: "#f0efe7",
+        ivory: "#fffff0",
+        black: "#171717",
       },
     },
   },
