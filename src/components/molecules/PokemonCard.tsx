@@ -1,10 +1,11 @@
 import Label from "@atoms/Label";
 import Image from "next/image";
-import { forwardRef } from "react";
+import { forwardRef, MouseEvent } from "react";
 
 interface PokemonCardProps {
   name: string;
   id: string;
+  onClick?: (event: MouseEvent<HTMLDivElement>) => void;
 }
 
 const PokemonCard = forwardRef(function PokemonCard(
@@ -18,6 +19,7 @@ const PokemonCard = forwardRef(function PokemonCard(
 
   return (
     <div
+      onClick={props.onClick}
       ref={ref}
       className="inline-flex justify-center items-center flex-col w-48 bg-ivory rounded-xl"
     >

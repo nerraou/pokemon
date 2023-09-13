@@ -14,6 +14,8 @@ const config: Config = {
         dove: "#f0efe7",
         ivory: "#fffff0",
         black: "#171717",
+        titan: "#EEEEFF",
+        "black-alpha": "rgba(0, 0, 0, 0.4)",
       },
     },
   },

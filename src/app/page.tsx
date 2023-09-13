@@ -1,12 +1,18 @@
 "use client";
 
+import PokemoneDetails from "@/components/molecules/PokemonDetails";
 import PokemonCard from "@molecules/PokemonCard";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 
 function getId(url: string) {
   const words = url.split("/");
 
   return words[words.length - 2];
+}
+
+interface Pokemon {
+  name: string;
+  url: string;
 }
 
 async function getPokemons(pageNumber: number) {
@@ -20,9 +26,8 @@ async function getPokemons(pageNumber: number) {
 }
 
 function Home() {
-  const [pokemons, setPokemons] = useState<any>([]);
+  const [pokemons, setPokemons] = useState<Array<Pokemon>>([]);
   const [pageNumber, setPageNumber] = useState(1);
-  //   const [loading, setLoading] = useState(true);
   const [lastElement, setLastElement] = useState(null);
   const countRef = useRef(0);
 
@@ -48,7 +53,7 @@ function Home() {
   useEffect(() => {
     getPokemons(pageNumber).then((data) => {
       countRef.current = data.count;
-      setPokemons((prev: any) => [...prev, ...data.results]);
+      setPokemons((prev) => [...prev, ...data.results]);
     });
   }, [pageNumber]);
 
@@ -71,20 +76,48 @@ function Home() {
     };
   }, [lastElement]);
 
+  const [showDetails, setSHowDetails] = useState(false);
+  const [pokemonId, setPokemonId] = useState<string | undefined>();
+
   return (
-    <section className="bg-dove grid place-items-center grid-cols-3 grid-flow-row gap-8">
-      {pokemons.map((pokemon: any) => {
-        const id = getId(pokemon.url);
-        return (
-          <PokemonCard
-            name={pokemon.name}
-            id={id}
-            key={id}
-            ref={setLastElement}
-          />
-        );
-      })}
-    </section>
+    <>
+      {showDetails && pokemonId && (
+        <div
+          className="flex justify-center items-center fixed w-screen h-screen bg-black-alpha"
+          onClick={() => {
+            setSHowDetails(false);
+          }}
+        >
+          <Suspense
+            fallback={
+              <h1 className="fixed h-screen w-screen bg-black-alpha text-4xl">
+                loading
+              </h1>
+            }
+          >
+            <PokemoneDetails id={pokemonId} />
+          </Suspense>
+        </div>
+      )}
+
+      <section className="bg-dove grid place-items-center grid-cols-3 grid-flow-row gap-8">
+        {pokemons.map((pokemon) => {
+          const id = getId(pokemon.url);
+          return (
+            <PokemonCard
+              name={pokemon.name}
+              id={id}
+              key={id}
+              ref={setLastElement}
+              onClick={() => {
+                setSHowDetails(true);
+                setPokemonId(id);
+              }}
+            />
+          );
+        })}
+      </section>
+    </>
   );
 }
 export default Home;
